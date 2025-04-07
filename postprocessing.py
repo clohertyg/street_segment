@@ -142,8 +142,8 @@ if __name__ == "__main__":
     # In[330]:
 
 
-    lookup_path = "data/cpd_offense_lookup.txt"
-    lookup = pd.read_csv(lookup_path, sep=',')
+    lookup_path = "data/cpd_offense_lookup.csv"
+    lookup = pd.read_csv(lookup_path, )
 
 
     # In[332]:
@@ -244,7 +244,7 @@ if __name__ == "__main__":
     # In[352]:
 
 
-    df.to_csv(output_csv, index=False, encoding='utf-8')
+    #df.to_csv(output_csv, index=False, encoding='utf-8')
 
 
 

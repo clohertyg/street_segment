@@ -2,14 +2,6 @@
 
 A Python script that collects Chicago incident data for the Cook County Dashboard.
 
-## Enable Git Large File Storage to Save this Data
-
-- download it here https://git-lfs.com/
-- changed the script to import reference tables as.txt (convert to parquet for later?)
-- add git lfs track "*incident.csv"
-- Ran a small subset as a test
-- Then ran the full file
-
 
 ## Execution :
 
