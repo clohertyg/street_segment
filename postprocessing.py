@@ -2,6 +2,46 @@ import datetime
 import pandas as pd
 import numpy as np
 import geopandas as gpd
+from azure.storage.blob import BlobServiceClient, ContainerClient
+from io import BytesIO
+import os
+
+API_KEY = os.environ['AZURE_BLOB']
+
+def azure_upload_df(container, df, filename, con, filepath=None ):
+    
+    """
+    Upload DataFrame to Azure Blob Storage for given container
+    Keyword arguments:
+    container -- the container folder name 
+    df -- the dataframe(df) object
+    filename -- name of the file
+    filepath -- the filename to use for the blob 
+    con -- azure connection string
+    """
+    
+    if filepath != None:
+        blob_path = filepath + filename
+    else:
+        blob_path = filename
+        
+    # initialize client
+    blob_service_client = BlobServiceClient(account_url=con)
+    
+    #specify file path
+    blob_client = blob_service_client.get_blob_client(
+    container=container, blob=blob_path
+        )
+    
+    #convert dataframe to a string object
+    output = df.to_csv(index=False, encoding="utf-8")
+    
+    #upload file
+    # overwrite the data
+    blob_client.upload_blob(data=output, blob_type="BlockBlob", overwrite=True)
+    
+    #close the client; we're done with it!
+    blob_service_client.close()
 
 def inc_data_read(start_year = 2018, full_dataset = True, convert_cook_crs = True):
     
@@ -136,7 +176,8 @@ df.rename(col_rename,axis=1)
 output_csv = "incident.csv"
 #df.to_csv(output_csv, index=False, encoding='utf-8')
 
-
+azure_upload_df(container='data', df=df, filepath='/',\
+                filename= output_csv, con=API_KEY)
 
 
 

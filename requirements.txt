@@ -2,3 +2,4 @@ pandas
 numpy
 datawrapper
 geopandas
+azure-storage-blob
