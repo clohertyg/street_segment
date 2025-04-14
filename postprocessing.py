@@ -172,10 +172,12 @@ drop_cols = [
 ]
 df.drop(columns=drop_cols, inplace=True)
 
-print(df.columns)
 
-col_rename = {'district':'District','ward':'Ward','community_area':'CommunityArea','IndexOffensedd':'IndexOffense'}
-df.rename(col_rename,axis=1)
+
+col_rename = {'district':'District','ward':'Ward','community_area':'CommunityArea'}
+df = df.rename(col_rename,axis=1)
+
+print(df.columns)
 output_csv = "incident.csv"
 #df.to_csv(output_csv, index=False, encoding='utf-8')
 
