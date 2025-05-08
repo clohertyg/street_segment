@@ -252,7 +252,7 @@ isj_sub.loc[:, 'theft_arrests'] = isj_sub['is_arrest'] * isj_sub['is_theft']
 def summarize(isj_sub):
     isj_sub = isj_sub.copy()
     isj_sub['year'] = isj_sub['date'].dt.year
-    isj_sub['year-month'] = isj_sub['date'].dt.to_period('M')
+    isj_sub['year-month'] = isj_sub['date'].dt.to_period('M').astype(str)
 
     seg = isj_sub.groupby('trans_id').agg(
         # crime counts
