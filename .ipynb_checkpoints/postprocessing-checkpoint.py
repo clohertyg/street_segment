@@ -387,35 +387,44 @@ neighborhood_summary, street_summary = summarize_neighborhoods(isj_sub)
 
 # seg
 seg = gpd.GeoDataFrame(seg, geometry='geometry', crs='EPSG:26916')
-seg_final = street.sjoin_nearest(seg, how = 'left').to_crs("EPSG:4326")
+seg_final = street.sjoin_nearest(seg, how = 'left')
+seg_final = seg_final.to_crs("EPSG:4326")
+
 sub = ['logiclf_right', 'pre_dir_right', 'street_nam_right', 'street_typ_right', 
        'ward', 'beat', 'district', 'community', 'case_number','geometry', 'index_right', 'trans_id_right', 
        'gun_count', 'gun_poss_count', 'robbery_count', 'violent_count', 'homicide_count', 'agg_assault_count',
        'theft_count', 'viol_gun_count', 'total_crimes', 'gun_arrests', 'gun_poss_arrests', 'robbery_arrests', 
        'violent_arrests', 'homicide_arrests', 'agg_assault_arrests', 'theft_arrests',
        'total_arrests', 'gp_ar', 'vi_ar', 'total_ar']
-seg_final = seg_final[sub].rename(columns={'logiclf_right':'logiclf', 
+seg_final = seg_final[sub]
+seg_final.rename(columns={'logiclf_right':'logiclf', 
                           'pre_dir_right': 'pre_dir', 'street_nam_right': 'street_nam', 
                           'street_typ_right': 'street_typ', 'trans_id_right':'trans_id',
                           'index_right':'index'},
                  inplace = True)
-seg_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_summary.parquet')
+for col in seg_final.select_dtypes(include='object').columns:
+    seg_final[col] = seg_final[col].astype(str)
 
+seg_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_summary.parquet')
 
 # seg_time
 seg_time = gpd.GeoDataFrame(seg_time, geometry='geometry', crs='EPSG:26916')
-seg_time_final = street.sjoin_nearest(seg_time, how = 'left').to_crs("EPSG:4326")
+street = street.to_crs(seg_time.crs) 
+seg_time_final = gpd.sjoin_nearest(seg_time, street, how='left')
+seg_time_final = seg_time_final.to_crs("EPSG:4326")
 
 sub = ['ward', 'beat', 'district', 'community', 'logiclf_right', 'pre_dir_right', 'street_nam_right',
        'street_typ_right', 'case_number', 'geometry', 'index_right', 'trans_id_right', 'year-month', 'year',
        'violent_count', 'gun_poss_count', 'total_crimes', 'gun_poss_arrests', 'violent_arrests',
        'total_arrests', 'total_ar', 'vi_ar', 'gp_ar'
 ]
-seg_time_final = seg_time_final[sub].rename(columns={'logiclf_right':'logiclf', 
+seg_time_final = seg_time_final[sub]
+seg_time_final.rename(columns={'logiclf_right':'logiclf', 
                           'pre_dir_right': 'pre_dir', 'street_nam_right': 'street_nam', 
                           'street_typ_right': 'street_typ', 'trans_id_right':'trans_id',
                           'index_right':'index'},
                  inplace = True)
+
 seg_time_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_time.parquet')
 
 # neighborhood_summary
@@ -433,4 +442,5 @@ sub = ['logiclf', 'pre_dir', 'street_nam',
 ]
 neighborhood_summary_final = neighborhood_summary_final[sub]
 neighborhood_summary_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\neighborhood_summary.parquet')
+
 
