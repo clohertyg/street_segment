@@ -394,13 +394,12 @@ sub = ['logiclf_right', 'pre_dir_right', 'street_nam_right', 'street_typ_right',
        'theft_count', 'viol_gun_count', 'total_crimes', 'gun_arrests', 'gun_poss_arrests', 'robbery_arrests', 
        'violent_arrests', 'homicide_arrests', 'agg_assault_arrests', 'theft_arrests',
        'total_arrests', 'gp_ar', 'vi_ar', 'total_ar']
-seg_final = seg_final[sub]
-seg_final.rename(columns={'logiclf_right':'logiclf', 
+seg_final = seg_final[sub].rename(columns={'logiclf_right':'logiclf', 
                           'pre_dir_right': 'pre_dir', 'street_nam_right': 'street_nam', 
                           'street_typ_right': 'street_typ', 'trans_id_right':'trans_id',
                           'index_right':'index'},
                  inplace = True)
-seg_final.to_file(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_summary.geojson', driver="GeoJSON")
+seg_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_summary.parquet')
 
 
 # seg_time
@@ -412,14 +411,12 @@ sub = ['ward', 'beat', 'district', 'community', 'logiclf_right', 'pre_dir_right'
        'violent_count', 'gun_poss_count', 'total_crimes', 'gun_poss_arrests', 'violent_arrests',
        'total_arrests', 'total_ar', 'vi_ar', 'gp_ar'
 ]
-seg_time_final = seg_time_final[sub]
-
-seg_time_final.rename(columns={'logiclf_right':'logiclf', 
+seg_time_final = seg_time_final[sub].rename(columns={'logiclf_right':'logiclf', 
                           'pre_dir_right': 'pre_dir', 'street_nam_right': 'street_nam', 
                           'street_typ_right': 'street_typ', 'trans_id_right':'trans_id',
                           'index_right':'index'},
                  inplace = True)
-seg_time_final.to_file(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_time.geojson', driver="GeoJSON")
+seg_time_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_time.parquet')
 
 # neighborhood_summary
 neighborhood_summary = gpd.GeoDataFrame(neighborhood_summary, geometry='comm_geom', crs='EPSG:26916')
@@ -435,5 +432,5 @@ sub = ['logiclf', 'pre_dir', 'street_nam',
        'pct_streets_with_violent_incident', 'pct_streets_with_violent_arrest'
 ]
 neighborhood_summary_final = neighborhood_summary_final[sub]
-neighborhood_summary_final.to_file(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\neighborhood_summary.geojson', driver="GeoJSON")
+neighborhood_summary_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\neighborhood_summary.parquet')
 
