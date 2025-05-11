@@ -3,3 +3,5 @@ numpy
 datawrapper
 geopandas
 azure-storage-blob
+pyarrow
+datetime
