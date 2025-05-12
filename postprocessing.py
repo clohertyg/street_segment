@@ -430,18 +430,6 @@ seg_time_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\pr
 
 # neighborhood_summary
 neighborhood_summary = gpd.GeoDataFrame(neighborhood_summary, geometry='comm_geom', crs='EPSG:26916')
-neighborhood_summary_final = street.sjoin_nearest(neighborhood_summary, how = 'left').to_crs("EPSG:4326")
-
-sub = ['logiclf', 'pre_dir', 'street_nam',
-       'street_typ', 'trans_id', 'geometry',
-       'index_right', 'community', 'total_streets', 'total_incidents',
-       'violent_incidents', 'gun_poss_count', 'total_arrests',
-       'violent_arrests', 'gun_poss_arrests',
-       'pct_streets_with_gun_possession',
-       'pct_streets_with_gun_possession_arrest',
-       'pct_streets_with_violent_incident', 'pct_streets_with_violent_arrest'
-]
-neighborhood_summary_final = neighborhood_summary_final[sub]
-neighborhood_summary_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\neighborhood_summary.parquet')
+neighborhood_summary.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\neighborhood_summary.parquet')
 
 
