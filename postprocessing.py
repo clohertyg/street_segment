@@ -1,6 +1,7 @@
 import geopandas as gpd
 import pandas as pd
 import datetime as dt
+import pyarrow
 
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
