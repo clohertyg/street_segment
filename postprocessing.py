@@ -406,7 +406,7 @@ seg_final.rename(columns={'logiclf_right':'logiclf',
 for col in seg_final.select_dtypes(include='object').columns:
     seg_final[col] = seg_final[col].astype(str)
 
-seg_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_summary.parquet')
+seg_final.to_parquet('seg_summary.parquet')
 
 # seg_time
 seg_time = gpd.GeoDataFrame(seg_time, geometry='geometry', crs='EPSG:26916')
@@ -426,10 +426,10 @@ seg_time_final.rename(columns={'logiclf_right':'logiclf',
                           'index_right':'index'},
                  inplace = True)
 
-seg_time_final.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\seg_time.parquet')
+seg_time_final.to_parquet('seg_time.parquet')
 
 # neighborhood_summary
 neighborhood_summary = gpd.GeoDataFrame(neighborhood_summary, geometry='comm_geom', crs='EPSG:26916')
-neighborhood_summary.to_parquet(r'C:\Users\clohe\Documents\loyola_northwestern\data\processed\neighborhood_summary.parquet')
+neighborhood_summary.to_parquet('neighborhood_summary.parquet')
 
 
