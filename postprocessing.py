@@ -211,17 +211,21 @@ def import_chi_boundaries(boundary_name = "beat"):
 
 
 arr = arr_data_read(full_dataset = True)
+print('Arrest data imported.')
 inc = inc_data_read(full_dataset = True)
+print('Incident data imported.')
 inc = offense_features(inc)
 inc['date'] = pd.to_datetime(inc['date'])
 
 com = import_chi_boundaries(boundary_name = "community_area")
+print('Community boundary data imported.')
 
 sub = ['geometry','area_num_1', 'community']
 com1 = com[sub]
 com1 = com1.rename(columns={'area_num_1':'community_area', 'geometry':'comm_geom'})
 com1['community_area'] = com1['community_area'].astype('float64')
 street = street_network_read(full_dataset = True)
+print('Street network data imported.')
 sub = ['pre_dir','logiclf', 'street_nam','street_typ','trans_id', 'geometry']
 street1 = street[sub]
 
@@ -235,6 +239,7 @@ sub = ['case_number', 'date','primary_type','arrest', 'domestic', 'beat',
 inc1 = inc[sub]
 
 inc_street_join = inc1.sjoin_nearest(street1, distance_col = "Distances")
+print('Spatial join between street network and incident data completed.')
 isj_sub = inc_street_join
 isj_sub = pd.merge(isj_sub, com1, on='community_area', how = 'left')
 isj_sub = isj_sub[isj_sub.community.notnull()]
@@ -325,8 +330,9 @@ def summarize(isj_sub):
     return seg, seg_time
 
 seg, seg_time = summarize(isj_sub)
+print("Crime counts by street segment in 'seg' dataframe.")
 
-
+print("Crime counts by street segment grouped at year-month level in 'seg_time' dataframe.")
 
 # Neighborhood-Level Aggregates
 
@@ -383,6 +389,7 @@ def summarize_neighborhoods(isj_sub):
 
 
 neighborhood_summary, street_summary = summarize_neighborhoods(isj_sub)
+print("Crime counts by each neighborhood in 'neighborhood_summary' dataframe.")
 
 # Saving to Files
 
@@ -407,6 +414,8 @@ for col in seg_final.select_dtypes(include='object').columns:
     seg_final[col] = seg_final[col].astype(str)
 
 seg_final.to_parquet('seg_summary.parquet')
+print("'seg' dataframe joined to street data and exported as parquet file.")
+
 
 # seg_time
 seg_time = gpd.GeoDataFrame(seg_time, geometry='geometry', crs='EPSG:26916')
@@ -427,9 +436,13 @@ seg_time_final.rename(columns={'logiclf_right':'logiclf',
                  inplace = True)
 
 seg_time_final.to_parquet('seg_time.parquet')
+print("'seg_time' dataframe joined to street data and exported as parquet file.")
+
 
 # neighborhood_summary
 neighborhood_summary = gpd.GeoDataFrame(neighborhood_summary, geometry='comm_geom', crs='EPSG:26916')
 neighborhood_summary.to_parquet('neighborhood_summary.parquet')
+print("'neighborhood_summary' dataframe joined to street data and exported as parquet file.")
+
 
 
